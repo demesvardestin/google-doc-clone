@@ -1,18 +1,21 @@
 <template>
   <div id="app" class="container">
-    <document />
+    <a href="#/newpage">redirect</a>
+    <!--<document />-->
+    <!--<router-link to="/new">-->
   </div>
 </template>
 
 <script>
-import document from './components/document.vue'
-
-export default {
-  name: 'app',
-  components: {
-    document
+  import document from './components/document.vue'
+  import navbar from './components/navbar.vue'
+  
+  export default {
+    name: 'app',
+    // components: {
+    //   document
+    // },
   }
-}
 </script>
 
 <style>
@@ -30,5 +33,9 @@ export default {
   
   .document-focused {
     box-shadow: 0 6px 15px 0 rgba(50,50,70,.08), 0 3px 5px 0 rgba(0,0,0,.05);
+  }
+  
+  .hide {
+    display: none;
   }
 </style>
