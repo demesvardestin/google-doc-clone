@@ -12,7 +12,8 @@
   "dependencies": {
     "path": "^0.12.7",
     "vue": "^2.6.6",
-    "vue-router": "^3.0.2"
+    "vue-router": "^3.0.2",
+    "express": "^4.16.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
