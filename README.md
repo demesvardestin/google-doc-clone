@@ -1,4 +1,6 @@
 ## Google Doc Clone
+Demo - [gdoc-clone](https://gdoc-clone.herokuapp.com "gdoc-clone")
+![gdoc-clone](https://github.com/demesvardestin/google-doc-clone/raw/master/src/assets/images/gdoc_clone.png "gdoc-clone")
 
 I recently started picking up Vue, and decided to build this very watered down
 version of Google Doc (or any realtime collaboration platform)
