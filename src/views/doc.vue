@@ -1,5 +1,5 @@
 <template>
-    <main class="document">
+    <main class="document container">
         <section class="row document-page">
             <div class="col-md-8 offset-md-2" style="padding: 20px 0;">
                 <textarea id="input-area" v-on:focus="documentFocused"
@@ -18,7 +18,7 @@
 
 <script>
     export default {
-        name: 'document',
+        name: 'doc',
         data() {
             return {};
         },
