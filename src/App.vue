@@ -10,16 +10,21 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <button class="btn btn-primary" @click="logOut">
-              Log Out
-            </button>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ currentUser.displayName }}
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" @click="logOut">Log Out</a>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
     </nav>
     
     <!-- DOC PAGE -->
-    <doc />
+    <dashboard :userID="currentUser.uid" :displayName="currentUser.displayName" />
   </div>
   
   <div id="home" v-else>
@@ -58,6 +63,11 @@
                 <div class="field">
                   <label for="email">Email</label>
                   <input type="email" class="form-control" placeholder="email" id="email">
+                </div>
+                
+                <div class="field">
+                  <label for="display-name">Display Name</label>
+                  <input type="text" class="form-control" placeholder="display name" id="display-name">
                 </div>
                 
                 <div class="field">
@@ -114,16 +124,18 @@
 
 <script>
   import doc from './views/doc.vue'
+  import dashboard from './views/dashboard.vue'
   
   export default {
     name: 'app',
     components: {
-      doc
+      dashboard
     },
     data() {
       return {
         loggedIn: false,
-        logInModalHidden: true
+        logInModalHidden: true,
+        currentUser: Object
       }
     },
     mounted: function () {
@@ -131,6 +143,7 @@
       
       if (user) {
         this.loggedIn = true;
+        this.currentUser = user;
       } else {
         this.loggedIn = false;
       }
@@ -139,6 +152,11 @@
       // Retrieve Email
       email: function () {
         return document.querySelector('#email');
+      },
+      
+      // Retrieve Email
+      displayName: function () {
+        return document.querySelector('#display-name');
       },
       
       // Retrieve Password
@@ -152,11 +170,22 @@
       },
       
       // Check Auth State
-      checkAuthState: function () {
-        var user = firebase.auth().currentUser;
+      checkAuthState: function (arg=null) {
+        let user = firebase.auth().currentUser;
         
         if (user) {
+          if (arg) {
+            user.updateProfile({
+              displayName: arg
+            }).then(function() {
+              // console.log('Profile updated!')
+            }).catch(function(error) {
+              // alert('An error occured while updating your profile');
+            });
+          }
+          
           this.loggedIn = true;
+          this.currentUser = user;
         } else {
           this.loggedIn = false;
         }
@@ -165,13 +194,14 @@
       // Create Account
       signUp: function () {
         let email = this.email().value;
+        let displayName = this.displayName().value;
         let password = this.password().value;
         let vm = this;
         
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(function (done) {
           // Display Alert
-          vm.checkAuthState();
+          vm.checkAuthState(displayName);
         })
         .catch(function(error) {
           var errorCode = error.code;
@@ -239,7 +269,7 @@
   }
   
   #home-body .row {
-    padding-top: calc((100vh - 70px)/7);
+    padding-top: 20px;
     vertical-align: middle;
   }
   
