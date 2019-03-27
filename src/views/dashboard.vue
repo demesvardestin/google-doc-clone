@@ -6,12 +6,14 @@
             <div class="col-md-3 cards-div">
                 <div class="card" id="new-document">
                     <a @click="createNewDocument" href="#" id="new-document-link">
-                        <div class="card-body">
-                            <div id="icon-div">
-                                <i class="fa fa-plus"></i>
-                            </div>
-                            <div id="icon-text-div">
-                                <h5>New Document</h5>
+                        <div class="card-body" id="new-document-body">
+                            <div id="icon-area">
+                                <div id="icon-div">
+                                    <i class="fa fa-plus"></i>
+                                </div>
+                                <div id="icon-text-div">
+                                    <h5>New Document</h5>
+                                </div>
                             </div>
                         </div>
                     </a>
@@ -39,25 +41,44 @@
             userID: String
         },
         mounted: function () {
+            let docRef = window.location.pathname.split('/')[1];
+            if (docRef.length == 20) {
+                this.currentDoc = docRef.toString();
+                this.currentlyEditing = true;
+            }
+            
             firestore.collection('pages').where('user', '==', this.userID)
             .get().then( docs => {
                 docs.forEach( doc => {
                     let container = document.querySelector('#cards-row');
                     let col = document.createElement('div');
                     let card = document.createElement('div');
-                    // let a = document.createElement('a');
+                    let a = document.createElement('a');
                     let cardBody = document.createElement('div');
-                    let h6 = document.createElement('h6');
+                    let p = document.createElement('p');
+                    let cardStyle = 'margin-bottom: 15px;';
+                    let cardBodyStyle = 'height: 180px; text-align: center; margin: 15px 0; cursor: pointer;';
+                    let pStyle = 'margin-top: 40px;';
                     
-                    h6.innerHTML = 'Doc ' + doc.id;
-                    col.setAttribute('class', 'col-md-3 doc');
-                    card.setAttribute('class', 'card');
-                    // a.setAttribute('@click', 'goToDocument');
+                    
+                    p.setAttribute('style', pStyle);
+                    p.innerHTML = 'Doc <br><span><b>' + doc.id + '</b></span>';
+                    
+                    col.setAttribute('class', 'col-md-3');
+                    
+                    card.setAttribute('class', 'card document');
+                    card.setAttribute('style', cardStyle);
+                    card.setAttribute('onmouseover', "this.classList.add('box-shadow')");
+                    card.setAttribute('onmouseout', "this.classList.remove('box-shadow')");
+                    
+                    a.setAttribute('onclick', 'window.location.replace("/' + doc.id + '")');
+                    
                     cardBody.setAttribute('class', 'card-body');
+                    cardBody.setAttribute('style', cardBodyStyle);
                     
-                    cardBody.appendChild(h6);
-                    // a.appendChild(cardBody);
-                    card.appendChild(cardBody);
+                    cardBody.appendChild(p);
+                    a.appendChild(cardBody);
+                    card.appendChild(a);
                     col.appendChild(card);
                     container.appendChild(col);
                 });
@@ -80,10 +101,24 @@
 </script>
 
 <style scoped>
-    #new-document, .doc {
-        height: 120px;
+    #new-document-body {
+        height: 180px;
         text-align: center;
         margin: 15px 0;
+    }
+    
+    #new-document {
+        margin-bottom: 15px;
+    }
+    
+    #cards-row {
+        padding-top: 20px;
+    }
+    
+    #icon-area {
+        height: 100%;
+        margin: auto;
+        padding-top: 40px;
     }
     
     .fa-plus {

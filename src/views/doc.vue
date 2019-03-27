@@ -53,7 +53,7 @@
         methods: {
             // Go to Dashboard
             toggleDashboard: function () {
-                window.location.reload();
+                window.location.reload('/');
             },
             doc: function () {
                 return document.querySelector('#input-area');
@@ -103,9 +103,9 @@
             
             // Save to Firebase
             addToFirebase: function () {
-                firestore.collection('pages').doc('test').set({
+                firestore.collection('pages').doc(this.docID).set({
                     content: this.doc().value
-                }).then(function(docRef) {
+                }, {merge: true}).then(function(docRef) {
                     if (docRef) {
                         // will do something here
                     }
